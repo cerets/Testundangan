@@ -424,6 +424,7 @@
 </section>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    
     <script>
   // ===== HERO CINEMATIC LOAD =====
 window.addEventListener("load", () => {
@@ -957,6 +958,15 @@ function resetIdle() {
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
     console.log("Firebase connect:", db);
+    db.ref("rsvp").push({
+  nama: "TEST DARI WEB",
+  status: "Hadir",
+  waktu: new Date().toISOString()
+}).then(() => {
+  console.log("✅ DATA MASUK");
+}).catch((err) => {
+  console.error("❌ ERROR:", err);
+});
 </script>
      
     <script>
