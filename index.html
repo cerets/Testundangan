@@ -404,21 +404,33 @@
 <div class="comment-list" id="comment-list">
   <h3>Ucapan & Doa 💌</h3>
  </div>
-      <div id="admin-panel">
-  <h3>📋 Buku Tamu</h3>
+     <div id="admin-panel" style="display:none; padding:20px; background:#0f0f0f; color:white;">
 
-  <div>
-    <span id="hadir-count">0 Hadir</span> |
-    <span id="tidak-count">0 Tidak Hadir</span>
+  <h2>📊 Admin Dashboard Wedding</h2>
+
+  <!-- SUMMARY -->
+  <div class="stats">
+    <div class="card">👥 Total: <span id="total">0</span></div>
+    <div class="card">✅ Hadir: <span id="hadir">0</span></div>
+    <div class="card">❌ Tidak Hadir: <span id="tidak">0</span></div>
+    <div class="card">👨‍👩‍👧 Jumlah Orang: <span id="orang">0</span></div>
   </div>
 
-  <div id="guest-list"></div>
-</div>
-      
-    </div>
-  
+  <!-- FILTER -->
+  <div style="margin:20px 0;">
+    <input type="text" id="search" placeholder="Cari nama..." />
+    
+    <select id="filter-status">
+      <option value="all">Semua</option>
+      <option value="Hadir">Hadir</option>
+      <option value="Tidak Hadir">Tidak Hadir</option>
+    </select>
+
+    <button onclick="exportExcel()">📥 Export Excel</button>
   </div>
-  
+
+  <!-- LIST -->
+  <div id="admin-list"></div>
 
 </div>
 </section>
@@ -942,41 +954,32 @@ function resetIdle() {
 </script>
      <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script>
  const firebaseConfig = {
-  apiKey: "AIzaSyDEufltbLjRDwy_ixkTNtwg3PB4NJ7B3VQ",
-  authDomain: "undanganap.firebaseapp.com",
-  databaseURL: "https://undanganap-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "undanganap",
-  storageBucket: "undanganap.firebasestorage.app",
-  messagingSenderId: "727400498036",
-  appId: "1:727400498036:web:78cae444cb56b50beea221",
-  measurementId: "G-B67L0Q0ZY0"
+  apiKey: "AIzaSyDPayYjqUn6lSlwbH8btHzHLckiTyWvPHI",
+  authDomain: "datatamu-9f3d2.firebaseapp.com",
+  databaseURL: "https://datatamu-9f3d2-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "datatamu-9f3d2",
+  storageBucket: "datatamu-9f3d2.firebasestorage.app",
+  messagingSenderId: "1059399296090",
+  appId: "1:1059399296090:web:a35f21c87ba3c678a6a463",
+  measurementId: "G-6VVGZT0HR9"
 };
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
     console.log("Firebase connect:", db);
-    db.ref("rsvp").push({
-  nama: "TEST DARI WEB",
-  status: "Hadir",
-  waktu: new Date().toISOString()
-}).then(() => {
-  console.log("✅ DATA MASUK");
-}).catch((err) => {
-  console.error("❌ ERROR:", err);
-});
-</script>
-     
-    <script>
-    // =======================
-// 🔧 CONFIG
+   
+
 // =======================
+// GLOBAL STATE
+// =======================
+let allData = [];
 const nomorWA = "6282118366357";
 
 // =======================
-// 🔐 ADMIN MODE
+// ADMIN CHECK
 // =======================
 function isAdmin() {
   const params = new URLSearchParams(window.location.search);
@@ -984,14 +987,7 @@ function isAdmin() {
 }
 
 // =======================
-// 💬 POPUP
-// =======================
-function showPopup(message) {
-  alert(message); // sementara pakai alert dulu biar aman
-}
-
-// =======================
-// 📝 KIRIM RSVP
+// RSVP SUBMIT
 // =======================
 function kirimWA() {
   const nama = document.getElementById("nama").value.trim();
@@ -1000,7 +996,7 @@ function kirimWA() {
   const jumlah = document.getElementById("jumlah")?.value || 1;
 
   if (!nama || !status) {
-    showPopup("Isi nama dan kehadiran dulu ya 🙏");
+    alert("Isi nama dan kehadiran dulu ya 🙏");
     return;
   }
 
@@ -1010,12 +1006,11 @@ function kirimWA() {
     `Halo, saya ${nama}\nKonfirmasi: ${status}\nJumlah: ${jumlah}\nPesan: ${pesan}`
   );
 
-  const url = `https://wa.me/${nomorWA}?text=${text}`;
-  window.open(url, "_blank");
+  window.open(`https://wa.me/${nomorWA}?text=${text}`, "_blank");
 }
 
 // =======================
-// ☁️ FIREBASE
+// SAVE FIREBASE
 // =======================
 function simpanRSVP(nama, status, jumlah, pesan) {
   db.ref("rsvp").push({
@@ -1028,37 +1023,27 @@ function simpanRSVP(nama, status, jumlah, pesan) {
 }
 
 // =======================
-// 📋 LOAD DATA
+// LOAD USER COMMENT
 // =======================
 function loadRSVP() {
-  const list = document.getElementById("guest-list");
-  const hadirEl = document.getElementById("hadir-count");
-  const tidakEl = document.getElementById("tidak-count");
-
+  const list = document.getElementById("comment-list");
   if (!list) return;
-
-  let hadir = 0;
-  let tidak = 0;
 
   db.ref("rsvp").on("child_added", (snapshot) => {
     const data = snapshot.val();
 
     const item = document.createElement("div");
+    item.classList.add("comment-item");
 
-    const statusClass =
-      data.status === "Hadir" ? "color:green" : "color:red";
-
-    if (data.status === "Hadir") hadir++;
-    else tidak++;
-
-    hadirEl.innerText = hadir + " Hadir";
-    tidakEl.innerText = tidak + " Tidak Hadir";
+    const color = data.status === "Hadir" ? "#4CAF50" : "#FF4D4D";
 
     item.innerHTML = `
-      <b>${data.nama}</b><br>
-      <span style="${statusClass}">${data.status}</span><br>
-      ${data.jumlah} orang
-      <p>${data.pesan || ""}</p>
+      <div style="margin-bottom:15px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05)">
+        <strong>${data.nama}</strong> 
+        <span style="color:${color}; font-size:12px;">(${data.status})</span><br>
+        <small>${data.jumlah} orang</small>
+        <p>${data.pesan || ""}</p>
+      </div>
     `;
 
     list.prepend(item);
@@ -1066,18 +1051,120 @@ function loadRSVP() {
 }
 
 // =======================
+// ADMIN DASHBOARD
+// =======================
+function loadAdminDashboard() {
+  const list = document.getElementById("admin-list");
+  if (!list) return;
+
+  db.ref("rsvp").on("value", (snapshot) => {
+    allData = [];
+
+    let total = 0, hadir = 0, tidak = 0, orang = 0;
+
+    snapshot.forEach((child) => {
+      const data = child.val();
+      allData.push(data);
+
+      total++;
+
+      if (data.status === "Hadir") {
+        hadir++;
+        orang += parseInt(data.jumlah || 1);
+      } else {
+        tidak++;
+      }
+    });
+
+    // update statistik
+    document.getElementById("total").innerText = total;
+    document.getElementById("hadir").innerText = hadir;
+    document.getElementById("tidak").innerText = tidak;
+    document.getElementById("orang").innerText = orang;
+
+    renderList(allData);
+  });
+}
+
+// =======================
+// RENDER LIST
+// =======================
+function renderList(dataList) {
+  const list = document.getElementById("admin-list");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  dataList.forEach(data => {
+    const div = document.createElement("div");
+    div.classList.add("item");
+
+    div.innerHTML = `
+      <strong>${data.nama}</strong><br>
+      ${data.status} (${data.jumlah} orang)<br>
+      <small>${data.pesan || "-"}</small>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+// =======================
+// EXPORT EXCEL
+// =======================
+function exportExcel() {
+  const ws = XLSX.utils.json_to_sheet(allData);
+  const wb = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(wb, ws, "RSVP");
+  XLSX.writeFile(wb, "data-tamu.xlsx");
+}
+
+// =======================
 // INIT
 // =======================
 document.addEventListener("DOMContentLoaded", () => {
+
   loadRSVP();
 
-  if (!isAdmin()) {
+  if (isAdmin()) {
+    document.getElementById("admin-panel").style.display = "block";
+    loadAdminDashboard();
+
+    // SEARCH
+    const search = document.getElementById("search");
+    if (search) {
+      search.addEventListener("input", function() {
+        const keyword = this.value.toLowerCase();
+
+        const filtered = allData.filter(d =>
+          d.nama.toLowerCase().includes(keyword)
+        );
+
+        renderList(filtered);
+      });
+    }
+
+    // FILTER
+    const filter = document.getElementById("filter-status");
+    if (filter) {
+      filter.addEventListener("change", function() {
+        const val = this.value;
+
+        if (val === "all") return renderList(allData);
+
+        const filtered = allData.filter(d => d.status === val);
+        renderList(filtered);
+      });
+    }
+
+  } else {
     const panel = document.getElementById("admin-panel");
     if (panel) panel.style.display = "none";
   }
+
 });
-    
-    </script>
+</script>
     <script>
     
     const btn = document.querySelector(".hero a");
