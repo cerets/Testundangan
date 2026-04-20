@@ -9,28 +9,128 @@
   
 }
 
-#admin-panel .card {
-  background: black; /* biar tetap dark elegant */
-  padding: 15px;
-  border-radius: 12px;
-  font-size: 14px;
-  color: white; /* 🔥 ini yang bikin teks putih */
+/* CONTAINER */
+#admin-panel {
+  background: linear-gradient(180deg, #0f0f0f, #000);
+  min-height: 100vh;
+  padding: 20px;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-#admin-panel .card span {
-  display: block;
+/* TITLE */
+#admin-panel h2 {
   font-size: 22px;
-  font-weight: bold;
-  background: white;
-  color: black; /* angka putih terang */
+  margin-bottom: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-#admin-list .item {
+/* GRID */
+#admin-panel .stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* CARD */
+#admin-panel .card {
+  background: rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(12px);
+  
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+/* LABEL */
+#admin-panel .card {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* ANGKA */
+#admin-panel .card span {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+/* SEARCH */
+#admin-panel input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  margin-top: 20px;
+  
+  background: rgba(255,255,255,0.06);
+  color: white;
+
+  outline: none;
+}
+
+/* SELECT + BUTTON */
+#admin-panel select,
+#admin-panel button {
+  width: 100%;
   padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  background: whitesmoke;
-  color: black;
+  border-radius: 12px;
+  border: none;
+
+  background: rgba(255,255,255,0.08);
+  color: white;
+
+  margin-top: 10px;
+}
+
+/* LIST CONTAINER */
+#admin-list {
+  margin-top: 20px;
+}
+
+/* ITEM LIST */
+#admin-list .item {
+  background: rgba(255,255,255,0.05);
+  padding: 14px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+
+  line-height: 1.6;
+  color: white;
+}
+
+/* NAMA */
+#admin-list .item strong {
+  font-size: 15px;
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* STATUS */
+#admin-list .item small {
+  color: rgba(255,255,255,0.6);
+}
+
+/* SPACING FILTER */
+#admin-panel .filter {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* BUTTON EXPORT */
+#admin-panel button {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#admin-panel button:active {
+  transform: scale(0.96);
 }
 
 /* LOCK SCREEN */
