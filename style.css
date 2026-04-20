@@ -20,7 +20,7 @@
   display: block;
   font-size: 22px;
   font-weight: bold;
-  color: #ffffff; /* angka putih terang */
+  color: black; /* angka putih terang */
 }
 
 #admin-list .item {
