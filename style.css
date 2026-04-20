@@ -8,6 +8,25 @@
   --white-soft: #fff5f8;
   
 }
+#admin-panel .stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+#admin-panel .card {
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  padding: 15px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+#admin-list .item {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+}
 
 
 /* LOCK SCREEN */
