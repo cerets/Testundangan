@@ -8,8 +8,9 @@
   --white-soft: #fff5f8;
   
 }
+
 #admin-panel .card {
-  background: rgba(255,255,255,0.05); /* biar tetap dark elegant */
+  background: black; /* biar tetap dark elegant */
   padding: 15px;
   border-radius: 12px;
   font-size: 14px;
@@ -20,6 +21,7 @@
   display: block;
   font-size: 22px;
   font-weight: bold;
+  background: white;
   color: black; /* angka putih terang */
 }
 
@@ -27,9 +29,8 @@
   padding: 12px;
   margin-bottom: 10px;
   border-radius: 10px;
-  background: rgba(255,255,255,0.05);
-  color: black; /* 🔥 semua teks putih */
-}
+  background: whitesmoke;
+  color: black;
 
 /* LOCK SCREEN */
 #cover {
