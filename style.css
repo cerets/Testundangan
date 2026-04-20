@@ -8,26 +8,28 @@
   --white-soft: #fff5f8;
   
 }
-#admin-panel .stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
 #admin-panel .card {
-  background: white;
+  background: rgba(255,255,255,0.05); /* biar tetap dark elegant */
   padding: 15px;
   border-radius: 12px;
   font-size: 14px;
+  color: white; /* 🔥 ini yang bikin teks putih */
+}
+
+#admin-panel .card span {
+  display: block;
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff; /* angka putih terang */
 }
 
 #admin-list .item {
   padding: 12px;
   margin-bottom: 10px;
   border-radius: 10px;
-  background: white;
+  background: rgba(255,255,255,0.05);
+  color: white; /* 🔥 semua teks putih */
 }
-
 
 /* LOCK SCREEN */
 #cover {
@@ -1774,4 +1776,4 @@ opacity: 0.5;
   opacity: 1;
   transform: scale(1.1);
   z-index: 2;
-}
+}.
