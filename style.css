@@ -156,18 +156,41 @@
 
 .cover-title {
   font-family: 'Sacramento', cursive;
-  font-size: 4rem;
-  margin-bottom: 10px;
+  font-size: 5rem;
+  margin-bottom: 1px;
   text-shadow: var(--shadow);
 }
-.guest-name {
-  font-size: 10px;
-  color: #fff;
-  margin-top: 10px;
-  letter-spacing: 1px;
-  opacity: 0.9;
+
+.guest-label {
+  
+  font-size: 14px;
+  z-index: 999;
+}
+#guest-name {
+   font-size: 3rem;
+  opacity: 0.8;
+  margin-top: 15px;
+  
+  font-family: Playfair Display,sans-serif;
+  color: white;
+  text-shadow: 
+    0 0 0px rgba(241, 78, 149, 0.8),
+    0 0 0px rgba(241, 78, 149, 0.6),
+    0 0 10px rgba(241, 78, 149, 0.4);
+  
+
 }
 
+/* ✨ Typing Cursor */
+.typing::after {
+  content: "";
+  margin-left: 5px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
 
 /* BASE */
 #fingerprint {
@@ -239,18 +262,18 @@ background: linear-gradient(45deg, #c5a85c, #d9d9d9, #c5a85c)transparent 60%);
 
 /* GARIS MENYALA SAAT SCAN */
 #fingerprint.active .fp-line {
-  stroke: #00ffcc;
+  stroke: #f8c8dc;
   filter: drop-shadow(0 0 60px #00ffcc);
   
 }
 
 /* SUKSES */
 #fingerprint.success .fp-line {
-  stroke: #00ffcc;
-  filter: drop-shadow(0 0 60px #0ffcc);
+  stroke: #f8c8dc;
+  filter: drop-shadow(0 0 60px #f8c8dc);
 }
 .crease {
-  stroke: #d4af37;
+  stroke: #f8c8dc;
 }
 
 /* ANIMASI HILANG */
@@ -321,113 +344,191 @@ background: linear-gradient(45deg, #c5a85c, #d9d9d9, #c5a85c)transparent 60%);
 }
 
 
-#profile {
+/* ===== PROFILE FULL ===== */
+.profile-full {
   position: relative;
-margin-bottom: 0;
-  
-  background-image: url('hero.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-/* wrapper utama */
-.couple-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-  z-index: 2;
-  align-items: center; /* 🔥 ini kunci */
-  gap: 60px;
-}
-
-/* card tiap orang */
-.couple-card {
-  text-align: center;
-  border-radius: 0px;
-  padding: 50px 50px;
-  backdrop-filter: blur(-5px);
-  position: relative;
-  z-index: 2;
-}
-
-/* frame foto */
-.frame {
-  width: 280px;
-  height: 280px;
-  margin: 0 auto 25px;
-
-  border-radius: 50%;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
-  position: relative;
 
-  border: 2px solid rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+transition: transform 1.2s ease;
 
-  box-shadow:
-    0 0 0 6px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba(0, 0, 0, 0.5),
-    inset 0 0 20px rgba(0,0,0,0.5);
+  background: black;
 }
 
-/* efek glow berputar */
-.frame::before {
-  content: "";
+/* FOTO */
+.profile-full img {
   position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  background: linear-gradient(4deg, black, transparent, black);
-  opacity: 0.4;
-  animation: rotateGlow 6s linear infinite;
-}
-
-@keyframes rotateGlow {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(60deg); }
-}
-.frame video {
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+
+  transform: scale(1.1);
+  transition: 2s ease;
 }
 
-/* nama */
-.name {
-  font-size: 40px;
-  font-family: 'Fleur De Leah', cursive;
-
-  background: linear-gradient(45deg, #d4af37, #fff, #d4af37);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  letter-spacing: 2px;
-
-  text-shadow:
-    0 0 10px rgba(212,175,55,0.4),
-    0 0 20px rgba(255,255,255,0.3);
+/* ZOOM HALUS SAAT SCROLL */
+.profile-full.show img {
+  transform: scale(1);
 }
 
-/* deskripsi */
-.desc {
-  font-size: 1rem;
-  font-family: serif;
-  color: rgba(255,255,255,0.85);
-
-  letter-spacing: 0px;
-  line-height: 1.6px;
-}
-
-
-
-
-
-
-
-#profile::before {
+/* OVERLAY */
+.profile-overlay {
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.6),
-    rgba(0,0,0,0.8)
+    to top,
+    rgba(0,0,0,0.9),
+    rgba(0,0,0,0.5),
+    rgba(0,0,0,0.2)
   );
 }
+
+/* CONTENT */
+.profile-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  margin-bottom: 80px;
+
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 1.5s ease;
+}
+
+/* AKTIF */
+.profile-full.show .profile-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* TEXT */
+.profile-content .label {
+  font-size: 12px;
+  letter-spacing: 3px;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.profile-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  margin-bottom: 15px;
+}
+
+.profile-content .desc {
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+/* VARIASI POSITION */
+.profile-full.ari {
+  align-items: flex-start;     /* naik ke atas */
+  justify-content: flex-start;   /* ke kanan */
+}
+/* POSISI TEKS */
+.profile-full.ari .profile-content {
+  text-align: right;
+  margin-top: 80px;
+  margin-right: 40px;
+  margin-bottom: 0; /* hilangkan posisi bawah */
+}
+/* KHUSUS PUTRI → KIRI BAWAH */
+.profile-full.putri {
+  align-items: flex-end;     /* ke bawah */
+  justify-content: flex-end; /* ke kiri */
+}
+
+/* POSISI TEKS */
+.profile-full.putri .profile-content {
+  text-align: left;
+  margin-left: 10px;
+  margin-bottom: 60px;
+  margin-top: 0;
+}
+
+.profile-content {
+  max-width: 300px;
+}
+
+.profile-content h2 {
+  line-height: 1.2;
+}
+
+
+
+.profile-full img {
+  z-index: 1;
+}
+
+.profile-overlay {
+  z-index: 2;
+}
+/* DEFAULT SEMBUNYI */
+.profile-content .anim {
+  opacity: 0;
+  filter: blur(10px);
+  transition: all 1.2s ease;
+}
+
+/* ===== ARI (DARI KIRI) ===== */
+.profile-full.ari .anim {
+  transform: translateX(-80px);
+}
+
+.profile-full.ari.show .anim {
+  opacity: 1;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+/* ===== PUTRI (DARI KANAN) ===== */
+.profile-full.putri .anim {
+  transform: translateX(80px);
+}
+
+.profile-full.putri.show .anim {
+  opacity: 1;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+
+/* GERAK MENDEKAT */
+.profile-full.ari.active {
+  transform: translateX(-40px) scale(1.03);
+}
+
+.profile-full.putri.active {
+  transform: translateX(40px) scale(1.03);
+}
+/* DELAY BIAR MASUK BERURUTAN */
+.profile-full.show .anim:nth-child(1) {
+  transition-delay: 0.2s;
+}
+.profile-full.show .anim:nth-child(2) {
+  transition-delay: 0.5s;
+}
+.profile-full.show .anim:nth-child(3) {
+  transition-delay: 0.8s;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* =========================
@@ -1580,22 +1681,6 @@ margin-top: 20px;
 
 
 
-.profile-section {
-  position: relative;
-  overflow: hidden;
- padding-top: 60px;
-  margin-top: 0;
-  
-  
-  
-}
-
-
-.profile-section::after {
-  opacity: 0;
-  animation: shine 3s linear infinite;
-}
-
 
 /* TEXT */
 .fancy-text {
@@ -1877,4 +1962,17 @@ opacity: 0.5;
   opacity: 1;
   transform: scale(1.1);
   z-index: 2;
+}
+.item button {
+  background: rgba(255, 0, 0, 0.2);
+  border: none;
+  color: #ff4d4d;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.item button:active {
+  transform: scale(0.9);
 }
