@@ -18,7 +18,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
       <!-- navbar -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     
@@ -32,8 +33,9 @@
     
  <div id="cover">
   <div class="cover-content text-center">
-    <h2 class="cover-title">Ari & Putri</h2>
-    <p class="guest-name" id="guest-name">Kepada Bapak/Ibu/Saudara/i</p>
+    <h1 class="cover-title">Ari & Putri</h2>
+       <p class="guest-label">Kepada Bpk/Ibu/Saudara/i</p>
+   <h2 id="guest-name" class="typing gold-text"></h2>
 <div id="fingerprint">
 <svg class="fingerprint" viewBox="0 0 100 100">
 	<linearGradient id="scan" gradientTransform="rotate(90)">
@@ -191,37 +193,39 @@
    
   </section>
   
-  <!-- WANITA -->
-  <section id="profile">
-  <div class="couple-wrapper">
-    <div class="sparkle-container"></div>
-    <!-- PUTRI -->
-    <div class="couple-card">
-      <div class="frame">
-        <video autoplay muted loop playsinline>
-    <source src="putri.mp4" type="video/mp4">
-  </video></div>
-        
-        <h2 class="name">Putri</h2>
-      <p class="desc">
-        Putri dari Bapak ... & Ibu ...
-      </p>
-    </div>
+    <!-- PROFILE ARI -->
+<section class="profile-full ari reveal">
+  <img src="ari.jpg" alt="Ari">
 
-    <!-- ARI -->
-    <div class="couple-card">
-      <div class="frame">
-        <video autoplay muted loop playsinline>
-    <source src="Ari.mp4" type="video/mp4">
-  </video> </div>
-      <h2 class="name">Ari</h2>
-      <p class="desc">
-       [ Putra dari Bapak Haerul magnar & Ibu Cucu rustarliah ]
-      </p>
-    </div>
+  <div class="profile-overlay"></div>
 
+  <div class="profile-content">
+    <p class="label anim">Mempelai Pria</p>
+    <h2 class="anim"> Ari</h2>
+    <p class="desc anim">
+      Putra dari Bapak Haerul Magnar <br>
+      & Ibu Cucu Rustarliah
+    </p>
   </div>
 </section>
+     
+     
+<!-- PROFILE PUTRI -->
+<section class="profile-full putri reveal">
+  <img src="putri.webp" alt="Putri">
+
+  <div class="profile-overlay"></div>
+
+  <div class="profile-content">
+     <p class="label anim">Mempelai Wanita</p>
+    <h2 class="anim"> putri</h2>
+    <p class="desc anim">
+      Putri dari Bapak [Nama Ayah] <br>
+      & Ibu [Nama Ibu]
+    </p>
+  </div>
+</section>
+  
     
       <!-- section waktu -->
     <section id="waktu" class="waktu-section text-center reveal section-right">
@@ -705,35 +709,51 @@ if (music) {
   });
 
 });
-     /* ===============================
-     👤 GUEST NAME (PERSONAL LINK)
-  =============================== */
-  function getGuestName() {
-    const params = new URLSearchParams(window.location.search);
-    let name = params.get("to");
+  /* ===============================
+   👤 GUEST NAME (PERSONAL LINK)
+=============================== */
 
-    if (!name) return "Tamu Undangan";
+function getGuestName() {
+  const params = new URLSearchParams(window.location.search);
+  let name = params.get("to");
 
-    name = decodeURIComponent(name)
-      .replace(/\+/g, " ")
-      .replace(/%20/g, " ");
+  if (!name) return "Tamu Undangan";
 
-    return name;
-  }
-
-  function setGuestName() {
-    const el = document.getElementById("guest-name");
-    if (!el) return;
-
-    const name = getGuestName();
-    el.innerText = "Kepada Yth. " + name;
-  }
-
-  setGuestName();
-     const inputNama = document.getElementById("nama");
-if (inputNama) {
-  inputNama.value = getGuestName();
+  return name.replace(/\+/g, " ");
 }
+
+function typeEffect(element, text, speed = 70) {
+  let i = 0;
+  element.innerHTML = "";
+
+  function typing() {
+    if (i < text.length) {
+      element.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, speed);
+    }
+  }
+
+  typing();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const name = getGuestName();
+  const el = document.getElementById("guest-name");
+
+  if (el) {
+    // delay biar nunggu "Kepada" muncul dulu
+    setTimeout(() => {
+      typeEffect(el, name);
+    }, 1000);
+  }
+
+  const inputNama = document.getElementById("nama");
+  if (inputNama) {
+    inputNama.value = name;
+    inputNama.setAttribute("readonly", true);
+  }
+});
 
 
 </script>
@@ -748,26 +768,6 @@ function copyRek(id) {
 }
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  const navLinks = document.querySelectorAll('.nav-link');
-  const navbarCollapse = document.getElementById('navbarNav');
-  const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
-    toggle: false
-  });
-
-  navLinks.forEach(function (link) {
-    link.addEventListener('click', function () {
-      bsCollapse.hide();
-
-      // reset icon hamburger
-      document.getElementById("menu-toggle").classList.remove("active");
-    });
-  });
-
-});
-</script>
 
    <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -789,12 +789,9 @@ document.addEventListener("DOMContentLoaded", () => {
           fill: "forwards"
         });
       }
-        
-        if (entry.target.tagName === "SECTION") {
-  entry.target.classList.add("show");
-}
 
-        if (entry.target.classList.contains("reveal")) {
+
+       if (entry.target.classList.contains("reveal")) {
           entry.target.classList.add("active");
         }
 
@@ -888,11 +885,9 @@ window.addEventListener("scroll", () => {
   const scale = 1.05 + scrollY * 0.0003;
   hero.style.transform = `scale(${scale})`;
 });
-</script>
-    <script>
+      
 let ticking = false;
 
-window.addEventListener("scroll", () => {
   if (!ticking) {
     window.requestAnimationFrame(() => {
       const hero = document.querySelector(".hero-bg");
@@ -956,21 +951,20 @@ function resetIdle() {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script>
- const firebaseConfig = {
-  apiKey: "AIzaSyDPayYjqUn6lSlwbH8btHzHLckiTyWvPHI",
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
   authDomain: "datatamu-9f3d2.firebaseapp.com",
   databaseURL: "https://datatamu-9f3d2-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "datatamu-9f3d2",
   storageBucket: "datatamu-9f3d2.firebasestorage.app",
   messagingSenderId: "1059399296090",
-  appId: "1:1059399296090:web:a35f21c87ba3c678a6a463",
-  measurementId: "G-6VVGZT0HR9"
+  appId: "1:1059399296090:web:a35f21c87ba3c678a6a463"
 };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-    console.log("Firebase connect:", db);
-   
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+console.log("Firebase connect:", db);
 
 // =======================
 // GLOBAL STATE
@@ -990,9 +984,9 @@ function isAdmin() {
 // RSVP SUBMIT
 // =======================
 function kirimWA() {
-  const nama = document.getElementById("nama").value.trim();
-  const status = document.getElementById("status").value;
-  const pesan = document.getElementById("pesan").value.trim();
+  const nama = document.getElementById("nama")?.value.trim();
+  const status = document.getElementById("status")?.value;
+  const pesan = document.getElementById("pesan")?.value.trim();
   const jumlah = document.getElementById("jumlah")?.value || 1;
 
   if (!nama || !status) {
@@ -1002,11 +996,7 @@ function kirimWA() {
 
   simpanRSVP(nama, status, jumlah, pesan);
 
-  const text = encodeURIComponent(
-    `Halo, saya ${nama}\nKonfirmasi: ${status}\nJumlah: ${jumlah}\nPesan: ${pesan}`
-  );
-
-  window.open(`https://wa.me/${nomorWA}?text=${text}`, "_blank");
+  alert("Terima kasih! Data berhasil dikirim 🎉");
 }
 
 // =======================
@@ -1029,24 +1019,28 @@ function loadRSVP() {
   const list = document.getElementById("comment-list");
   if (!list) return;
 
-  db.ref("rsvp").on("child_added", (snapshot) => {
-    const data = snapshot.val();
+  db.ref("rsvp").on("value", (snapshot) => {
+    list.innerHTML = "";
 
-    const item = document.createElement("div");
-    item.classList.add("comment-item");
+    snapshot.forEach(child => {
+      const data = child.val();
 
-    const color = data.status === "Hadir" ? "#4CAF50" : "#FF4D4D";
+      const item = document.createElement("div");
+      item.classList.add("comment-item");
 
-    item.innerHTML = `
-      <div style="margin-bottom:15px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05)">
-        <strong>${data.nama}</strong> 
-        <span style="color:${color}; font-size:12px;">(${data.status})</span><br>
-        <small>${data.jumlah} orang</small>
-        <p>${data.pesan || ""}</p>
-      </div>
-    `;
+      const color = data.status === "Hadir" ? "#4CAF50" : "#FF4D4D";
 
-    list.prepend(item);
+      item.innerHTML = `
+        <div style="margin-bottom:15px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.05)">
+          <strong>${data.nama}</strong> 
+          <span style="color:${color}; font-size:12px;">(${data.status})</span><br>
+          <small>${data.jumlah} orang</small>
+          <p>${data.pesan || ""}</p>
+        </div>
+      `;
+
+      list.prepend(item);
+    });
   });
 }
 
@@ -1062,10 +1056,11 @@ function loadAdminDashboard() {
 
     let total = 0, hadir = 0, tidak = 0, orang = 0;
 
-    snapshot.forEach((child) => {
+    snapshot.forEach(child => {
       const data = child.val();
-      allData.push(data);
+      data.id = child.key;
 
+      allData.push(data);
       total++;
 
       if (data.status === "Hadir") {
@@ -1102,11 +1097,24 @@ function renderList(dataList) {
     div.innerHTML = `
       <strong>${data.nama}</strong><br>
       ${data.status} (${data.jumlah} orang)<br>
-      <small>${data.pesan || "-"}</small>
+      <small>${data.pesan || "-"}</small><br><br>
+
+      <button onclick="hapusData('${data.id}')">🗑 Hapus</button>
     `;
 
     list.appendChild(div);
   });
+}
+
+// =======================
+// DELETE DATA
+// =======================
+function hapusData(id) {
+  if (confirm("Yakin mau hapus data ini?")) {
+    db.ref("rsvp/" + id).remove()
+      .then(() => alert("Data berhasil dihapus"))
+      .catch(err => alert("Gagal hapus: " + err));
+  }
 }
 
 // =======================
@@ -1128,7 +1136,9 @@ document.addEventListener("DOMContentLoaded", () => {
   loadRSVP();
 
   if (isAdmin()) {
-    document.getElementById("admin-panel").style.display = "block";
+    const panel = document.getElementById("admin-panel");
+    if (panel) panel.style.display = "block";
+
     loadAdminDashboard();
 
     // SEARCH
